@@ -184,7 +184,7 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 		else
 		{
 			// Get the API results
-			$userAPI = $this->get_dockerhub_response('https://api.github.com/users/' . $dockerhub_user, $github_token);
+			$userAPI = $this->get_dockerhub_response('https://api.github.com/users/' . $dockerhub_user);
 			$widget = '
 				<div class="gmpw-container">
 					<a href="https://github.com/' . $userAPI['login'] . '" class="gmpw-head-link">
@@ -252,7 +252,7 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 							Joined on ' . $this->gitDate($userAPI['created_at']) . '
 						</span>
 					</div>';
-						$starredCount = count($this->get_dockerhub_response('https://api.github.com/users/' . $dockerhub_user . '/starred', $github_token));
+						$starredCount = count($this->get_dockerhub_response('https://api.github.com/users/' . $dockerhub_user . '/starred'));
 						$widget .= '
 						<div class="gmpw-numbers">
 							<a href="https://github.com/' . $userAPI['login'] . '/followers">
@@ -297,33 +297,18 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 		}
 	}
 
-	private function get_dockerhub_response($url, $token)
+	private function get_dockerhub_response($url)
 	{
 			// Start curl
 			$curl = curl_init();
 			// Set curl options
 			curl_setopt($curl, CURLOPT_URL, $url);
 			curl_setopt($curl, CURLOPT_HTTPGET, true);
+			curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+					'Content-Type: application/json',
+					'Accept: application/json'
+			));
 
-			// Check if a token is set
-			if (preg_replace('/\s+/', '', $token) != '' || $token != null)
-			{
-					// If a token is set attempt to send it in the header
-					curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-							'Content-Type: application/json',
-							'Accept: application/json',
-							'Authorization: token ' . $token
-					));
-			}
-			else
-			{
-					// If no token is set, send the header as unauthenticated,
-					// some features may not work and a lower rate limit applies.
-					curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-							'Content-Type: application/json',
-							'Accept: application/json'
-					));
-			}
 			// Set the user agent
 			curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
 			// Set curl to return the response, rather than print it
