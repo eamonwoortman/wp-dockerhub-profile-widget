@@ -1,17 +1,17 @@
 <?php
 /*
-Plugin Name: GitHub Mini Profile Widget
-Plugin URI: http://f13dev.com/wordpress-plugin-github-profile-widget/
-Description: Add a mini version of your GitHub profile to a widget on a WordPress powered site.
+Plugin Name: DockerHub Mini Profile Widget
+Plugin URI: TBD
+Description: Add a mini version of your DockerHub profile to a widget on a WordPress powered site.
 Version: 1.0
-Author: Jim Valentine - f13dev
-Author URI: http://f13dev.com
-Text Domain: f13-github-mini-profile-widget
+Author: Eamon Woortman - eamonwoortman
+Author URI: https://eamonwoortman.nl
+Text Domain: dockerhub-mini-profile-widget
 License: GPLv3
 */
 
 /*
-Copyright 2016 James Valentine - f13dev (jv@f13dev.com)
+Copyright 2017 Eamon Woortman - eamonwoortman (contact@eamonwoortman.com)
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 3 of the License, or
@@ -28,33 +28,33 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 /**
 * Register the widget
 */
-add_action('widgets_init', create_function('', 'return register_widget("GitHub_Mini_Profile_Widget");'));
+add_action('widgets_init', create_function('', 'return register_widget("DockerHub_Mini_Profile_Widget");'));
 // Register the css
-add_action( 'wp_enqueue_scripts', 'gmpw_style');
+add_action( 'wp_enqueue_scripts', 'ew-dhmpw-style');
 
 /**
  * A function to register and enque the stylesheet
  */
 function gmpw_style()
 {
-	wp_register_style( 'f13-gmpw-style', plugins_url('github-profile-widget.css', __FILE__) );
-  wp_enqueue_style( 'f13-gmpw-style' );
+	wp_register_style( 'ew-dhmpw-style', plugins_url('dockerhub-profile-widget.css', __FILE__) );
+	wp_enqueue_style( 'ew-dhmpw-style' );
 }
 
 /**
- * A class to generate a GitHub profile widget
+ * A class to generate a DockerHub profile widget
  */
-class GitHub_Mini_Profile_Widget extends WP_Widget
+class DockerHub_Mini_Profile_Widget extends WP_Widget
 {
 	/** Basic Widget Settings */
-	const WIDGET_NAME = "GitHub Mini Profile Widget";
-	const WIDGET_DESCRIPTION = "Add a mini version of your GitHub profile to your website.";
+	const WIDGET_NAME = "DockerHub Mini Profile Widget";
+	const WIDGET_DESCRIPTION = "Add a mini version of your DockerHub profile to your website.";
 
 	var $textdomain;
 	var $fields;
 
 	/**
-	* Create a new instance of the GitHub widget
+	* Create a new instance of the DockerHub widget
 	* by setting the widget setting fields.
 	*/
 	function __construct()
@@ -63,9 +63,8 @@ class GitHub_Mini_Profile_Widget extends WP_Widget
 
 		//Add fields
 		$this->add_field('title', 'Widget title', '', 'text');
-		$this->add_field('github_user', 'GitHub ID', '', 'text');
-		$this->add_field('github_token', 'GitHub API Token', '', 'text');
-		$this->add_field('github_timeout', 'Cache timeout (minutes)', '30', 'number');
+		$this->add_field('dockerhub_user', 'DockerHub ID', '', 'text');
+		$this->add_field('dockerhub_timeout', 'Cache timeout (minutes)', '30', 'number');
 		//Init the widget
 		parent::__construct($this->textdomain, __(self::WIDGET_NAME, $this->textdomain), array( 'description' => __(self::WIDGET_DESCRIPTION, $this->textdomain), 'classname' => $this->textdomain));
 	}
@@ -119,7 +118,7 @@ class GitHub_Mini_Profile_Widget extends WP_Widget
 		*/
 		?>
 		<br/>
-		Use this widget to add a mini version of your GitHub profile as a widget<br/>
+		Use this widget to add a mini version of your DockerHub profile as a widget<br/>
 		<br/>
 		Get your access token from <a href="https://github.com/settings/tokens" target="_blank">https://github.com/settings/tokens</a>.<br/>
 		<br/>
@@ -175,7 +174,7 @@ class GitHub_Mini_Profile_Widget extends WP_Widget
 		extract($instance);
 
 		// Set the cache name for this instance of the widget
-		$cache = get_transient('wpgpw' . md5(serialize($github_user)));
+		$cache = get_transient('wpdhpw' . md5(serialize($dockerhub_user)));
 
 		if ($cache)
 		{
@@ -185,14 +184,14 @@ class GitHub_Mini_Profile_Widget extends WP_Widget
 		else
 		{
 			// Get the API results
-			$userAPI = $this->f13_get_github_api('https://api.github.com/users/' . $github_user, $github_token);
+			$userAPI = $this->get_dockerhub_response('https://api.github.com/users/' . $dockerhub_user, $github_token);
 			$widget = '
 				<div class="gmpw-container">
 					<a href="https://github.com/' . $userAPI['login'] . '" class="gmpw-head-link">
 						<div class="gmpw-head">
 						  <div class="gmpw-headder">
 								<svg aria-hidden="true" height="18" version="1.1" viewBox="0 0 16 16" width="18"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
-								GitHub
+								DockerHub
 							</div>
 							<div class="gmpw-profile-picture">
 								<img src="' . $userAPI['avatar_url'] . '"  />
@@ -253,7 +252,7 @@ class GitHub_Mini_Profile_Widget extends WP_Widget
 							Joined on ' . $this->gitDate($userAPI['created_at']) . '
 						</span>
 					</div>';
-						$starredCount = count($this->f13_get_github_api('https://api.github.com/users/' . $github_user . '/starred', $github_token));
+						$starredCount = count($this->get_dockerhub_response('https://api.github.com/users/' . $dockerhub_user . '/starred', $github_token));
 						$widget .= '
 						<div class="gmpw-numbers">
 							<a href="https://github.com/' . $userAPI['login'] . '/followers">
@@ -288,134 +287,134 @@ class GitHub_Mini_Profile_Widget extends WP_Widget
 					</div>
 				</div>
 			';
-			$timeout = $github_timeout * 60;
+			$timeout = $dockerhub_timeout * 60;
 			if ($timeout == 0)
 			{
 				$timeout = 1;
 			}
-			set_transient('wpgpw' . md5(serialize($github_user)), $widget, $timeout);
+			set_transient('wpdhpw' . md5(serialize($dockerhub_user)), $widget, $timeout);
 			echo $widget;
 		}
 	}
 
-	private function f13_get_github_api($url, $token)
-	 {
-			 // Start curl
-			 $curl = curl_init();
-			 // Set curl options
-			 curl_setopt($curl, CURLOPT_URL, $url);
-			 curl_setopt($curl, CURLOPT_HTTPGET, true);
+	private function get_dockerhub_response($url, $token)
+	{
+			// Start curl
+			$curl = curl_init();
+			// Set curl options
+			curl_setopt($curl, CURLOPT_URL, $url);
+			curl_setopt($curl, CURLOPT_HTTPGET, true);
 
-			 // Check if a token is set
-			 if (preg_replace('/\s+/', '', $token) != '' || $token != null)
-			 {
-					 // If a token is set attempt to send it in the header
-					 curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-							 'Content-Type: application/json',
-							 'Accept: application/json',
-							 'Authorization: token ' . $token
-					 ));
-			 }
-			 else
-			 {
-					 // If no token is set, send the header as unauthenticated,
-					 // some features may not work and a lower rate limit applies.
-					 curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-							 'Content-Type: application/json',
-							 'Accept: application/json'
-					 ));
-			 }
-			 // Set the user agent
-			 curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-			 // Set curl to return the response, rather than print it
-			 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			// Check if a token is set
+			if (preg_replace('/\s+/', '', $token) != '' || $token != null)
+			{
+					// If a token is set attempt to send it in the header
+					curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+							'Content-Type: application/json',
+							'Accept: application/json',
+							'Authorization: token ' . $token
+					));
+			}
+			else
+			{
+					// If no token is set, send the header as unauthenticated,
+					// some features may not work and a lower rate limit applies.
+					curl_setopt($curl, CURLOPT_HTTPHEADER, array(
+							'Content-Type: application/json',
+							'Accept: application/json'
+					));
+			}
+			// Set the user agent
+			curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
+			// Set curl to return the response, rather than print it
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-			 // Get the results
-			 $result = curl_exec($curl);
+			// Get the results
+			$result = curl_exec($curl);
 
-			 // Close the curl session
-			 curl_close($curl);
+			// Close the curl session
+			curl_close($curl);
 
-			 // Decode the results
-			 $result = json_decode($result, true);
+			// Decode the results
+			$result = json_decode($result, true);
 
-			 // Return the results
-			 return $result;
-	 }
+			// Return the results
+			return $result;
+	}
 
-	 private function gitDate($date)
-	 {
-		 $dateArray = explode('-', $date);
-		 // Add the day to the string
-		 $date = substr($dateArray[2], 0, 2) . ' ';
-		 // Add the month to the string
-		 $date .= $this->getMonth($dateArray[1]) . ' ';
-		 // Add the year
-		 $date .= $dateArray[0];
-		 return $date;
-	 }
+	private function gitDate($date)
+	{
+		$dateArray = explode('-', $date);
+		// Add the day to the string
+		$date = substr($dateArray[2], 0, 2) . ' ';
+		// Add the month to the string
+		$date .= $this->getMonth($dateArray[1]) . ' ';
+		// Add the year
+		$date .= $dateArray[0];
+		return $date;
+	}
 
-	 private function getMonth($month)
-	 {
-		 if ($month == '01')
-		 {
-			 return 'Jan';
-		 }
-		 else
-		 if ($month == '02')
-		 {
-			 return 'Feb';
-		 }
-		 else
-		 if ($month == '03')
-		 {
-			 return 'Mar';
-		 }
-		 else
-		 if ($month == '04')
-		 {
-			 return 'Apr';
-		 }
-		 else
-		 if ($month == '05')
-		 {
-			 return 'May';
-		 }
-		 else
-		 if ($month == '06')
-		 {
-			 return 'Jun';
-		 }
-		 else
-		 if ($month == '07')
-		 {
-			 return 'Jul';
-		 }
-		 else
-		 if ($month == '08')
-		 {
-			 return 'Aug';
-		 }
-		 else
-		 if ($month == '09')
-		 {
-			 return 'Sep';
-		 }
-		 else
-		 if ($month == '10')
-		 {
-			 return 'Oct';
-		 }
-		 else
-		 if ($month == '11')
-		 {
-			 return 'Nov';
-		 }
-		 else
-		 if ($month == '12')
-		 {
-			 return 'Dec';
-		 }
-	 }
+	private function getMonth($month)
+	{
+		if ($month == '01')
+		{
+			return 'Jan';
+		}
+		else
+		if ($month == '02')
+		{
+			return 'Feb';
+		}
+		else
+		if ($month == '03')
+		{
+			return 'Mar';
+		}
+		else
+		if ($month == '04')
+		{
+			return 'Apr';
+		}
+		else
+		if ($month == '05')
+		{
+			return 'May';
+		}
+		else
+		if ($month == '06')
+		{
+			return 'Jun';
+		}
+		else
+		if ($month == '07')
+		{
+			return 'Jul';
+		}
+		else
+		if ($month == '08')
+		{
+			return 'Aug';
+		}
+		else
+		if ($month == '09')
+		{
+			return 'Sep';
+		}
+		else
+		if ($month == '10')
+		{
+			return 'Oct';
+		}
+		else
+		if ($month == '11')
+		{
+			return 'Nov';
+		}
+		else
+		if ($month == '12')
+		{
+			return 'Dec';
+		}
+	}
 
 }
