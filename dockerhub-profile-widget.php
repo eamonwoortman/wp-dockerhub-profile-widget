@@ -30,12 +30,12 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 */
 add_action('widgets_init', create_function('', 'return register_widget("DockerHub_Mini_Profile_Widget");'));
 // Register the css
-add_action( 'wp_enqueue_scripts', 'ew-dhmpw-style');
+add_action( 'wp_enqueue_scripts', 'ew_dhmpw_style');
 
 /**
  * A function to register and enque the stylesheet
  */
-function gmpw_style()
+function ew_dhmpw_style()
 {
 	wp_register_style( 'ew-dhmpw-style', plugins_url('dockerhub-profile-widget.css', __FILE__) );
 	wp_enqueue_style( 'ew-dhmpw-style' );
