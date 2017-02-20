@@ -198,7 +198,7 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 							</div>
 							<div class="gmpw-names">
 								<div class="gmpw-name">
-									' . ($userAPI['full_name'] == "") ? $userAPI['full_name'] : $userAPI['username'] . '
+									' . $userAPI['full_name'] . '
 								</div>
 								<div class="gmpw-user">
 									@' . $userAPI['username'] . '
@@ -206,7 +206,6 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 							</div>
 						</a>
 					</div>';
-
 					$widget .= '
 					<div class="gmpw-info">
 						<span class="gmpw-info-user">
@@ -234,25 +233,41 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 							$widget .= '
 							<svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 14 16" width="14"><path d="M8 8h3v2H7c-.55 0-1-.45-1-1V4h2v4zM7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7z"></path></svg>
 							Joined on ' . $this->gitDate($userAPI['date_joined']) . '
-						</span>
-					</div>';
+						</span>';
+						
 						$starredAPI = $this->get_dockerhub_response('https://hub.docker.com/v2/users/' . $dockerhub_user . '/repositories/starred/?page=1&page_size=1');
+						$repositoriesAPI = $this->get_dockerhub_response('https://registry.hub.docker.com/v2/repositories/' . $dockerhub_user . '/?page=1&page_size=3');	
 						$starredCount = $starredAPI['count'];
 						$widget .= '
-						<div class="gmpw-numbers">
+						<span>
+							<svg width="14px" height="16px" viewBox="0 0 14 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Octicons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="star" fill="#000000"><polygon id="Shape" points="14 6 9.1 5.36 7 1 4.9 5.36 0 6 3.6 9.26 2.67 14 7 11.67 11.33 14 10.4 9.26"></polygon></g></g></svg>
+
 							<a href="https://hub.docker.com/u/' . $userAPI['username'] . '/starred/">
 								<span>
-									<span>' . $starredCount . '</span><br />
-									Starred
+									<span>' . $starredCount . '</span> Starred
 								</span>
 							</a>
-						</div>';
-					$repositoriesAPI = $this->get_dockerhub_response('https://registry.hub.docker.com/v2/repositories/' . $dockerhub_user . '/');	
-					$widget .= '
-					<div class="gmpw-repos">
+						</span>
 						<span class="gmpw-repos-public">
 							<svg aria-hidden="true" class="octicon octicon-repo" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path d="M4 9H3V8h1v1zm0-3H3v1h1V6zm0-2H3v1h1V4zm0-2H3v1h1V2zm8-1v12c0 .55-.45 1-1 1H6v2l-1.5-1.5L3 16v-2H1c-.55 0-1-.45-1-1V1c0-.55.45-1 1-1h10c.55 0 1 .45 1 1zm-1 10H1v2h2v-1h3v1h5v-2zm0-10H2v9h9V1z"></path></svg>
 							<a href="https://hub.docker.com/u/' . $userAPI['username'] . '">' . $repositoriesAPI['count'] . ' Public Repos</a>
+						</span>
+					</div>';
+					$widget .= '
+					<div class="gmpw-repos">
+						<span class="gmpw-latest-repos">
+							<span><b>Popular repos</b></span>';
+							
+					foreach($repositoriesAPI['results'] as $repository) {
+							$widget .= '
+							<span class="repository">' . $repository['name'] . '<div class="repo-info">
+							<svg width="14px" height="16px" viewBox="0 0 14 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Octicons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="star" fill="#000000"><polygon id="Shape" points="14 6 9.1 5.36 7 1 4.9 5.36 0 6 3.6 9.26 2.67 14 7 11.67 11.33 14 10.4 9.26"></polygon></g></g></svg>
+							' . $repository['star_count'] . 
+							' <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Octicons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="cloud-download" fill="#000000"><path d="M9,12 L11,12 L8,15 L5,12 L7,12 L7,7 L9,7 L9,12 L9,12 Z M12,4 C12,3.56 11.09,1 7.5,1 C5.08,1 3,2.92 3,5 C1.02,5 0,6.52 0,8 C0,9.53 1,11 3,11 L6,11 L6,9.7 L3,9.7 C1.38,9.7 1.3,8.28 1.3,8 C1.3,7.83 1.35,6.3 3,6.3 L4.3,6.3 L4.3,5 C4.3,3.61 5.86,2.3 7.5,2.3 C10.05,2.3 10.63,3.85 10.7,4.1 L10.7,5.3 L12,5.3 C12.81,5.3 14.7,5.52 14.7,7.5 C14.7,9.59 12.45,9.7 12,9.7 L10,9.7 L10,11 L12,11 C14.08,11 16,9.84 16,7.5 C16,5.06 14.08,4 12,4 L12,4 Z" id="Shape"></path></g></g></svg>
+							' . $repository['pull_count'] . '</div></span>';	
+					}
+
+					$widget .= '
 						</span>
 					</div>
 				</div>
