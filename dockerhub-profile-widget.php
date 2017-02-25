@@ -186,31 +186,28 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 			// Get the API results
 			$userAPI = $this->get_dockerhub_response('https://hub.docker.com/v2/users/' . $dockerhub_user . '/');
 			$widget = '
-				<div class="gmpw-container">
-					<a href="https://hub.docker.com/u/' . $userAPI['username'] . '/" class="gmpw-head-link">
-						<div class="gmpw-head">
-							<div class="gmpw-headder">
-								<svg aria-hidden="true" height="18" version="1.1" viewBox="0 0 16 16" width="18"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"></path></svg>
-								DockerHub
-							</div>
-							<div class="gmpw-profile-picture">
-								<img src="' . $userAPI['gravatar_url'] . '"  />
-							</div>
-							<div class="gmpw-names">
-								<div class="gmpw-name">
-									' . $userAPI['full_name'] . '
-								</div>
-								<div class="gmpw-user">
+				<div class="dhmpw-container">
+                    <div class="dhmpw-head">
+						<a href="https://hub.docker.com/u/' . $userAPI['username'] . '/" class="dhmpw-head-link">
+							<div class="dhmpw-header">
+                                <img src="'.plugins_url("img/docker-mini-logo.svg", __FILE__ ).'" alt="docker logo" class="dhmpw-docker-logo"/>
+                                <div class="dhmpw-title">Docker Hub</div>
+		                         <div class="dhmpw-profile-picture">
+                                    <img src="' . $userAPI['gravatar_url'] . '">
+                                </div>
+                                <div class="dhmpw-user">
 									@' . $userAPI['username'] . '
 								</div>
-							</div>
+							</div>							
 						</a>
 					</div>';
+					
+					
 					$widget .= '
-					<div class="gmpw-info">
-						<span class="gmpw-info-user">
+					<div class="dhmpw-info">
+						<span class="dhmpw-info-user">
 							<svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 14 16" width="14"><path d="M4.75 4.95C5.3 5.59 6.09 6 7 6c.91 0 1.7-.41 2.25-1.05A1.993 1.993 0 0 0 13 4c0-1.11-.89-2-2-2-.41 0-.77.13-1.08.33A3.01 3.01 0 0 0 7 0C5.58 0 4.39 1 4.08 2.33 3.77 2.13 3.41 2 3 2c-1.11 0-2 .89-2 2a1.993 1.993 0 0 0 3.75.95zm5.2-1.52c.2-.38.59-.64 1.05-.64.66 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2-.65 0-1.17-.53-1.19-1.17.06-.19.11-.39.14-.59zM7 .98c1.11 0 2.02.91 2.02 2.02 0 1.11-.91 2.02-2.02 2.02-1.11 0-2.02-.91-2.02-2.02C4.98 1.89 5.89.98 7 .98zM3 5.2c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.45 0 .84.27 1.05.64.03.2.08.41.14.59C4.17 4.67 3.66 5.2 3 5.2zM13 6H1c-.55 0-1 .45-1 1v3c0 .55.45 1 1 1v2c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h1v3c0 .55.45 1 1 1h2c.55 0 1-.45 1-1v-3h1v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-2c.55 0 1-.45 1-1V7c0-.55-.45-1-1-1zM3 13H2v-3H1V7h2v6zm7-2H9V9H8v6H6V9H5v2H4V7h6v4zm3-1h-1v3h-1V7h2v3z"></path></svg>
-							' . $userAPI['username'] . '<br />';
+                            ' . $userAPI['username'] . '<br />';
 
 							if ($userAPI['location'] != '')
 							{
@@ -221,8 +218,7 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 
 						$widget .= '
 						</span>
-						<span class="gmpw-info-website">';
-
+						<span class="dhmpw-info-website">';
 							if ($userAPI['profile_url'] != '')
 							{
 								$widget .= '
@@ -248,29 +244,40 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 								</span>
 							</a>
 						</span>
-						<span class="gmpw-repos-public">
+						<span class="dhmpw-repos-public">
 							<svg aria-hidden="true" class="octicon octicon-repo" height="16" version="1.1" viewBox="0 0 12 16" width="12"><path d="M4 9H3V8h1v1zm0-3H3v1h1V6zm0-2H3v1h1V4zm0-2H3v1h1V2zm8-1v12c0 .55-.45 1-1 1H6v2l-1.5-1.5L3 16v-2H1c-.55 0-1-.45-1-1V1c0-.55.45-1 1-1h10c.55 0 1 .45 1 1zm-1 10H1v2h2v-1h3v1h5v-2zm0-10H2v9h9V1z"></path></svg>
 							<a href="https://hub.docker.com/u/' . $userAPI['username'] . '">' . $repositoriesAPI['count'] . ' Public Repos</a>
 						</span>
 					</div>';
+
 					$widget .= '
-					<div class="gmpw-repos">
-						<span class="gmpw-latest-repos">
-							<span><b>Popular repos</b></span>';
-							
+					<div class="dhmpw-repos">
+                        <span class="dhmpw-popular-repos">
+                            <b>Popular repositories</b>
+                        </span>
+                    ';
+					if($repositoriesAPI['count'] == 0) {
+						$widget .= '
+                        <span>This user has no repos yet</span>';
+					}		
+
 					foreach($repositoriesAPI['results'] as $repository) {
-							$widget .= '
-							<span class="repository">' . $repository['name'] . '<div class="repo-info">
-							<svg width="14px" height="16px" viewBox="0 0 14 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Octicons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="star" fill="#000000"><polygon id="Shape" points="14 6 9.1 5.36 7 1 4.9 5.36 0 6 3.6 9.26 2.67 14 7 11.67 11.33 14 10.4 9.26"></polygon></g></g></svg>
-							' . $repository['star_count'] . 
-							' <svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g id="Octicons" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="cloud-download" fill="#000000"><path d="M9,12 L11,12 L8,15 L5,12 L7,12 L7,7 L9,7 L9,12 L9,12 Z M12,4 C12,3.56 11.09,1 7.5,1 C5.08,1 3,2.92 3,5 C1.02,5 0,6.52 0,8 C0,9.53 1,11 3,11 L6,11 L6,9.7 L3,9.7 C1.38,9.7 1.3,8.28 1.3,8 C1.3,7.83 1.35,6.3 3,6.3 L4.3,6.3 L4.3,5 C4.3,3.61 5.86,2.3 7.5,2.3 C10.05,2.3 10.63,3.85 10.7,4.1 L10.7,5.3 L12,5.3 C12.81,5.3 14.7,5.52 14.7,7.5 C14.7,9.59 12.45,9.7 12,9.7 L10,9.7 L10,11 L12,11 C14.08,11 16,9.84 16,7.5 C16,5.06 14.08,4 12,4 L12,4 Z" id="Shape"></path></g></g></svg>
-							' . $repository['pull_count'] . '</div></span>';	
+                        $repoUrl = "https://hub.docker.com/r/". $userAPI['username'] . "/" .$repository['name'] . "/";
+                        $widget .= '
+						<span class="dhmpw-repository">
+							<span><a href="' . $repoUrl . '"> ' . $repository['name'] . '</a></span>
+							<div class="dhmpw-repo-info">
+								<img src="'.plugins_url("img/github-star-logo.svg", __FILE__ ).'"/> ' . $repository['star_count'] . ' 
+								<img src="'.plugins_url("img/github-downloads-logo.svg", __FILE__ ).'"/> ' . $repository['pull_count'] . '
+							</div>
+						</span>
+                        ';
 					}
 
 					$widget .= '
-						</span>
 					</div>
 				</div>
+			</div>
 			';
 			$timeout = $dockerhub_timeout * 60;
 			if ($timeout == 0)

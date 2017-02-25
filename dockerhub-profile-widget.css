@@ -1,61 +1,48 @@
-.gmpw-container
-{
+.dhmpw-container {
   border: 1px solid #d8d8d8;
-  border-radius: 10px;
 }
 
-.gmpw-head-link
-{
-  color: #333;
+.dhmpw-head-link {
+  color: #c4cdda;
   display: block;
 }
 
-.gmpw-head-link:hover
-{
-  color: #333;
+.dhmpw-head-link:hover {
+  color: #c4cdda;
 }
 
-.gmpw-headder
-{
-  border-radius: 10px 10px 0 0;
-  padding: 0.2em 0.6em;
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#f6f8f9+0,e5ebee+50,d7dee3+51,f5f7f9+100;White+Gloss */
-  background: rgb(246,248,249); /* Old browsers */
-  background: -moz-linear-gradient(top,  rgba(246,248,249,1) 0%, rgba(229,235,238,1) 50%, rgba(215,222,227,1) 51%, rgba(245,247,249,1) 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  rgba(246,248,249,1) 0%,rgba(229,235,238,1) 50%,rgba(215,222,227,1) 51%,rgba(245,247,249,1) 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  rgba(246,248,249,1) 0%,rgba(229,235,238,1) 50%,rgba(215,222,227,1) 51%,rgba(245,247,249,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f6f8f9', endColorstr='#f5f7f9',GradientType=0 ); /* IE6-9 */
-  line-height: 24px;
-  border-bottom: 1px solid #d8d8d8;
+.dhmpw-head {
+  height: 65px;
+}
+
+.dhmpw-header {
+  padding: 10px 0px 0px 10px;
+  background: #22354c;
   font-size: 1.2em;
   margin-bottom: 0;
+  height: 55px;
 }
 
-.gmpw-headder > img
-{
+.dhmpw-header > img {
   width: 24px;
   height: auto;
 }
 
-.gmpw-profile-picture
-{
+.dhmpw-profile-picture {
   width: 23%;
   height: auto;
   position: relative;;
-  display: inline-block;
-  top: 0.2em;
-  left: 0.6em;
+  display: block;
+  float: right;
 }
 
-.gmpw-profile-picture > img
-{
-  width: 100%;
-  height: auto;
+.dhmpw-profile-picture > img {
+  width: 30px;
+  height: 30px;
   border-radius: 0.6em;
 }
 
-.gmpw-names
-{
+.dhmpw-names {
   margin-left: 5%;
   position: relative;
   display: inline-block;
@@ -63,85 +50,80 @@
   left: 0;
 }
 
-.gmpw-name
-{
+.dhmpw-name {
   font-weight: bolder;
   font-size: 1.3em;
 }
-.gmpw-user
-{
+
+.dhmpw-user {
+  margin-top: 5px;
 }
 
-.gmpw-bio
-{
+.dhmpw-title {
+  float:left;
+  margin-left: 5px;
+  color: white;
+}
+
+.dhmpw-bio {
   padding: 0.5em 4% 0.323em 4%;
   border-bottom: 1px solid #d8d8d8;
 }
 
-.gmpw-bio > span
-{
+.dhmpw-bio > span {
   font-weight: bold;
 }
 
-.gmpw-info
-{
+.dhmpw-info {
+  background:white;
   padding: 0.323em 4%;
   border-bottom: 1px solid #d8d8d8;
 }
 
-.gmpw-info > span
-{
+.dhmpw-info > span {
   display: inline-block;
   min-width: 40%;
   padding-right: 5px;
 }
 
-.gmpw-info > span > svg
-{
+.dhmpw-info > span > svg {
   margin-right: 5px;
 }
 
-.gmpw-info a
-{
+.dhmpw-info a {
   color: #4088c0;
   text-decoration: none;
 }
 
-.gmpw-info a:hover
-{
+.dhmpw-info a:hover {
   color: #d8d8d8;
   text-decoration: underline;
 }
-.gmpw-repos
-{
+
+.dhmpw-repos {
   padding: 0.323em 4%;
 }
 
-.gmpw-repos > span
-{
+.dhmpw-repos > span {
   display: block;
 }
 
-.gmpw-repos a
-{
+.dhmpw-repos a {
   color: #4088c0;
   text-decoration: none;
 }
 
-.gmpw-repos a:hover
-{
+.dhmpw-repos a:hover {
   color: #d8d8d8;
   text-decoration: underline;
 }
 
-.gmpw-numbers
-{
+.dhmpw-numbers {
   padding: 0.323em 4%;
   border-bottom: 1px solid #d8d8d8;
 }
 
-.gmpw-numbers > a > span
-{
+.dhmpw-numbers > a > span {
   display: inline-block;
   width: 31.65%;
   text-align: center;
@@ -149,14 +131,47 @@
   color: #b8b8b8;
 }
 
-.gmpw-numbers > a:hover > span
-{
+.dhmpw-numbers > a:hover > span {
   border-bottom-color: #d8d8d8;
 }
 
-.gmpw-numbers > a > span > span
-{
+.dhmpw-numbers > a > span > span {
   color: #4088c0;
   font-weight: bolder;
   font-size: 2em;
+}
+
+.dhmpw-docker-logo {
+  width: 45px; 
+  height: 55px;
+  float: left;
+}
+
+.dhmpw-docker-logo g {
+  fill: cornflowerblue; 
+}
+
+.dhmpw-repository {
+  display: inline-block;
+}
+
+.dhmpw-repository::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.dhmpw-repo-info {
+  float:right;
+  color: #22354c;
+}
+
+.dhmpw-repo-info > img {
+  width: 16px;
+  height: 16px;
+}
+
+.dhmpw-popular-repos {
+  height: 25px;
+  color: #22354c;
 }
