@@ -152,7 +152,7 @@
 }
 
 .dhmpw-repository {
-  display: inline-block;
+  font-size: 12px;
 }
 
 .dhmpw-repository::after {
@@ -174,4 +174,10 @@
 .dhmpw-popular-repos {
   height: 25px;
   color: #22354c;
+}
+
+.dhmpw-repo-pulls {
+    width: 60px;
+    padding-left: 10px;
+    display: inline-block;
 }
