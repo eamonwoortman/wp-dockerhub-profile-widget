@@ -120,8 +120,6 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 		<br/>
 		Use this widget to add a mini version of your DockerHub profile as a widget<br/>
 		<br/>
-		Get your access token from <a href="https://github.com/settings/tokens" target="_blank">https://github.com/settings/tokens</a>.<br/>
-		<br/>
 		<?php
 		/* Generate admin form fields */
 		foreach($this->fields as $field_name => $field_data)
