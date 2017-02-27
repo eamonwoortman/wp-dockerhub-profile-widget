@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Comfortaa:400,700);
+
 .dhmpw-container {
   border: 1px solid #d8d8d8;
 }
@@ -180,4 +182,27 @@
     width: 55px;
     padding-left: 10px;
     display: inline-block;
+}
+
+.dhmpw-title-docker {
+    font-family: Comfortaa;
+    font-size: 18px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: -.4px;
+    color: #fff;
+    margin-right: 2px;
+    margin-left: 2px;
+}
+
+.dhmpw-title-hub {
+    font-family: Comfortaa;
+    font-size: 18px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: -.4px;
+    color: #fff;
+    opacity: .7;
 }

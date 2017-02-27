@@ -189,7 +189,10 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 						<a href="https://hub.docker.com/u/' . $userAPI['username'] . '/" class="dhmpw-head-link">
 							<div class="dhmpw-header">
                                 <img src="'.plugins_url("img/docker-mini-logo.svg", __FILE__ ).'" alt="docker logo" class="dhmpw-docker-logo"/>
-                                <div class="dhmpw-title">Docker Hub</div>
+								<div class="dhmpw-title">
+                                     <span class="dhmpw-title-docker">docker</span>
+                                     <span class="dhmpw-title-hub">hub</span>
+                                </div>
 		                         <div class="dhmpw-profile-picture">
                                     <img src="' . $userAPI['gravatar_url'] . '">
                                 </div>
