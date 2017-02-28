@@ -1,0 +1,208 @@
+@import url(https://fonts.googleapis.com/css?family=Comfortaa:400,700);
+
+.dhmpw-container {
+  border: 1px solid #d8d8d8;
+}
+
+.dhmpw-head-link {
+  color: #c4cdda;
+  display: block;
+}
+
+.dhmpw-head-link:hover {
+  color: #c4cdda;
+}
+
+.dhmpw-head {
+  height: 65px;
+}
+
+.dhmpw-header {
+  padding: 10px 0px 0px 10px;
+  background: #22354c;
+  font-size: 1.2em;
+  margin-bottom: 0;
+  height: 55px;
+}
+
+.dhmpw-header > img {
+  width: 24px;
+  height: auto;
+}
+
+.dhmpw-profile-picture {
+  width: 23%;
+  height: auto;
+  position: relative;;
+  display: block;
+  float: right;
+}
+
+.dhmpw-profile-picture > img {
+  width: 30px;
+  height: 30px;
+  border-radius: 0.6em;
+}
+
+.dhmpw-names {
+  margin-left: 5%;
+  position: relative;
+  display: inline-block;
+  top: 0.2em;
+  left: 0;
+}
+
+.dhmpw-name {
+  font-weight: bolder;
+  font-size: 1.3em;
+}
+
+.dhmpw-user {
+  margin-top: 5px;
+}
+
+.dhmpw-title {
+  float:left;
+  margin-left: 5px;
+  color: white;
+}
+
+.dhmpw-bio {
+  padding: 0.5em 4% 0.323em 4%;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.dhmpw-bio > span {
+  font-weight: bold;
+}
+
+.dhmpw-info {
+  background:white;
+  padding: 0.323em 4%;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.dhmpw-info > span {
+  display: inline-block;
+  min-width: 40%;
+  padding-right: 5px;
+}
+
+.dhmpw-info > span > svg {
+  margin-right: 5px;
+}
+
+.dhmpw-info a {
+  color: #4088c0;
+  text-decoration: none;
+}
+
+.dhmpw-info a:hover {
+  color: #d8d8d8;
+  text-decoration: underline;
+}
+
+.dhmpw-repos {
+  padding: 0.323em 4%;
+}
+
+.dhmpw-repos > span {
+  display: block;
+}
+
+.dhmpw-repos a {
+  color: #4088c0;
+  text-decoration: none;
+}
+
+.dhmpw-repos a:hover {
+  color: #d8d8d8;
+  text-decoration: underline;
+}
+
+.dhmpw-numbers {
+  padding: 0.323em 4%;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.dhmpw-numbers > a > span {
+  display: inline-block;
+  width: 31.65%;
+  text-align: center;
+  border-bottom: 6px solid #4078c0;
+  color: #b8b8b8;
+}
+
+.dhmpw-numbers > a:hover > span {
+  border-bottom-color: #d8d8d8;
+}
+
+.dhmpw-numbers > a > span > span {
+  color: #4088c0;
+  font-weight: bolder;
+  font-size: 2em;
+}
+
+.dhmpw-docker-logo {
+  width: 45px; 
+  height: 55px;
+  float: left;
+}
+
+.dhmpw-docker-logo g {
+  fill: cornflowerblue; 
+}
+
+.dhmpw-repository {
+  font-size: 12px;
+}
+
+.dhmpw-repository::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+.dhmpw-repo-info {
+  float:right;
+  color: #22354c;
+}
+
+.dhmpw-repo-info > img {
+  width: 16px;
+  height: 16px;
+}
+
+.dhmpw-popular-repos {
+  height: 25px;
+  color: #22354c;
+}
+
+.dhmpw-repo-pulls {
+    width: 55px;
+    padding-left: 10px;
+    display: inline-block;
+}
+
+.dhmpw-title-docker {
+    font-family: Comfortaa;
+    font-size: 18px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: -.4px;
+    color: #fff;
+    margin-right: 2px;
+    margin-left: 2px;
+}
+
+.dhmpw-title-hub {
+    font-family: Comfortaa;
+    font-size: 18px;
+    font-weight: 700;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: -.4px;
+    color: #fff;
+    opacity: .7;
+}
