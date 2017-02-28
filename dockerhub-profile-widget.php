@@ -120,8 +120,6 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 		<br/>
 		Use this widget to add a mini version of your DockerHub profile as a widget<br/>
 		<br/>
-		Get your access token from <a href="https://github.com/settings/tokens" target="_blank">https://github.com/settings/tokens</a>.<br/>
-		<br/>
 		<?php
 		/* Generate admin form fields */
 		foreach($this->fields as $field_name => $field_data)
@@ -191,7 +189,10 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 						<a href="https://hub.docker.com/u/' . $userAPI['username'] . '/" class="dhmpw-head-link">
 							<div class="dhmpw-header">
                                 <img src="'.plugins_url("img/docker-mini-logo.svg", __FILE__ ).'" alt="docker logo" class="dhmpw-docker-logo"/>
-                                <div class="dhmpw-title">Docker Hub</div>
+								<div class="dhmpw-title">
+                                     <span class="dhmpw-title-docker">docker</span>
+                                     <span class="dhmpw-title-hub">hub</span>
+                                </div>
 		                         <div class="dhmpw-profile-picture">
                                     <img src="' . $userAPI['gravatar_url'] . '">
                                 </div>
@@ -263,12 +264,16 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 
 					foreach($repositoriesAPI['results'] as $repository) {
                         $repoUrl = "https://hub.docker.com/r/". $userAPI['username'] . "/" .$repository['name'] . "/";
+
+						$pullCount = $this->number_shorten((int)$repository['pull_count'], 1);
+						$starCount = $this->number_shorten((int)$repository['star_count'], 1);
+
                         $widget .= '
 						<span class="dhmpw-repository">
 							<span><a href="' . $repoUrl . '"> ' . $repository['name'] . '</a></span>
 							<div class="dhmpw-repo-info">
-								<img src="'.plugins_url("img/github-star-logo.svg", __FILE__ ).'"/> ' . $repository['star_count'] . ' 
-								<img src="'.plugins_url("img/github-downloads-logo.svg", __FILE__ ).'"/> ' . $repository['pull_count'] . '
+								<span><img src="'.plugins_url("img/github-star-logo.svg", __FILE__ ).'"/> ' . $starCount . '</span>
+								<span class="dhmpw-repo-pulls" ><img src="'.plugins_url("img/github-downloads-logo.svg", __FILE__ ).'"/> ' . $pullCount . '</span>
 							</div>
 						</span>
                         ';
@@ -392,6 +397,40 @@ class DockerHub_Mini_Profile_Widget extends WP_Widget
 		{
 			return 'Dec';
 		}
+	}
+
+	// Shortens a number and attaches K, M, B, etc. accordingly (from: http://stackoverflow.com/a/35329932)
+	private function number_shorten($number, $precision = 3, $divisors = null) {
+
+		// Setup default $divisors if not provided
+		if (!isset($divisors)) {
+			$divisors = array(
+				pow(1000, 0) => '', // 1000^0 == 1
+				pow(1000, 1) => 'K', // Thousand
+				pow(1000, 2) => 'M', // Million
+				pow(1000, 3) => 'B', // Billion
+				pow(1000, 4) => 'T', // Trillion
+				pow(1000, 5) => 'Qa', // Quadrillion
+				pow(1000, 6) => 'Qi', // Quintillion
+			);    
+		}
+
+		// Loop through each $divisor and find the
+		// lowest amount that matches
+		foreach ($divisors as $divisor => $shorthand) {
+			if (abs($number) < ($divisor * 1000)) {
+				// We found a match!
+				break;
+			}
+		}
+		
+		if ($number < 1000) {
+			$precision = 0;
+		}
+
+		// We found our match, or there were no matches.
+		// Either way, use the last defined value for $divisor.
+		return number_format($number / $divisor, $precision) . $shorthand;
 	}
 
 }
