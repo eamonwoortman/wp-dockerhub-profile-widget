@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: DockerHub Mini Profile Widget
-Plugin URI: TBD
+Plugin URI: https://eamonwoortman.nl/dockerhub-profile-wordpress-widget/
 Description: Add a mini version of your DockerHub profile to a widget on a WordPress powered site.
 Version: 1.0
 Author: Eamon Woortman - eamonwoortman
