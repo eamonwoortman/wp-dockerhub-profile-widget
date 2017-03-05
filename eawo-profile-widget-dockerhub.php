@@ -3,7 +3,7 @@
 Plugin Name: EaWo Profile Widget for Docker Hub
 Plugin URI: https://eamonwoortman.nl/dockerhub-profile-wordpress-widget/
 Description: Add a mini version of your DockerHub profile to a widget on a WordPress powered site.
-Version: 1.0
+Version: 1.1
 Author: Eamon Woortman - eamonwoortman
 Author URI: https://eamonwoortman.nl
 Text Domain: eawo-profile-widget-dockerhub
