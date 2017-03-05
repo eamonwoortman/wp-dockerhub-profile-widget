@@ -183,6 +183,13 @@ class EaWo_Profile_Widget_DockerHub extends WP_Widget
 		{
 			// Get the API results
 			$userAPI = $this->get_dockerhub_response('https://hub.docker.com/v2/users/' . $dockerhub_user . '/');
+
+			if ($userAPI == NULL) {
+				echo("Docker Hub User does not exist: '" . $dockerhub_user. "'<br/><br/>");
+				echo("Please configure a different Docker Hub username.<br/>");
+				return;
+			}
+			
 			$widget = '
 				<div class="dhmpw-container">
                     <div class="dhmpw-head">
