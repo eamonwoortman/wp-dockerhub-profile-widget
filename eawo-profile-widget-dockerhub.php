@@ -37,7 +37,7 @@ add_action( 'wp_enqueue_scripts', 'ew_dhmpw_style');
  */
 function ew_dhmpw_style()
 {
-	wp_register_style( 'ew-dhmpw-style', plugins_url('dockerhub-profile-widget.css', __FILE__) );
+	wp_register_style( 'ew-dhmpw-style', plugins_url('eawo-profile-widget-dockerhub.css', __FILE__) );
 	wp_enqueue_style( 'ew-dhmpw-style' );
 }
 
