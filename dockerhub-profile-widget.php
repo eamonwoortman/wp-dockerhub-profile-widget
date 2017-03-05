@@ -1,12 +1,12 @@
 <?php
 /*
-Plugin Name: DockerHub Mini Profile Widget
+Plugin Name: EaWo Profile Widget for Docker Hub
 Plugin URI: https://eamonwoortman.nl/dockerhub-profile-wordpress-widget/
 Description: Add a mini version of your DockerHub profile to a widget on a WordPress powered site.
 Version: 1.0
 Author: Eamon Woortman - eamonwoortman
 Author URI: https://eamonwoortman.nl
-Text Domain: dockerhub-mini-profile-widget
+Text Domain: eawo-profile-widget-dockerhub
 License: GPLv3
 */
 
@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 /**
 * Register the widget
 */
-add_action('widgets_init', create_function('', 'return register_widget("DockerHub_Mini_Profile_Widget");'));
+add_action('widgets_init', create_function('', 'return register_widget("EaWo_Profile_Widget_DockerHub");'));
 // Register the css
 add_action( 'wp_enqueue_scripts', 'ew_dhmpw_style');
 
@@ -44,10 +44,10 @@ function ew_dhmpw_style()
 /**
  * A class to generate a DockerHub profile widget
  */
-class DockerHub_Mini_Profile_Widget extends WP_Widget
+class EaWo_Profile_Widget_DockerHub extends WP_Widget
 {
 	/** Basic Widget Settings */
-	const WIDGET_NAME = "DockerHub Mini Profile Widget";
+	const WIDGET_NAME = "Docker Hub Mini Profile Widget";
 	const WIDGET_DESCRIPTION = "Add a mini version of your DockerHub profile to your website.";
 
 	var $textdomain;

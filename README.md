@@ -1,4 +1,4 @@
-# wp-dockerhub-profile-widget
+# eawo-profile-widget-dockerhub
 A WordPress widget that utilises the Docker Hub API to display a snapshot of your Docker Hub profile on your WordPress blog.
 
 # Plugin Details
