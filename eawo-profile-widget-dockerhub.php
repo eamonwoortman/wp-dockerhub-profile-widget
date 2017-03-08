@@ -303,32 +303,18 @@ class EaWo_Profile_Widget_DockerHub extends WP_Widget
 
 	private function get_dockerhub_response($url)
 	{
-			// Start curl
-			$curl = curl_init();
-			// Set curl options
-			curl_setopt($curl, CURLOPT_URL, $url);
-			curl_setopt($curl, CURLOPT_HTTPGET, true);
-			curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-					'Content-Type: application/json',
-					'Accept: application/json'
-			));
+		$response = wp_remote_get( esc_url_raw( $url ) );
+		$response_code = wp_remote_retrieve_response_code( $response );
 
-			// Set the user agent
-			curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-			// Set curl to return the response, rather than print it
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		if ($response_code != 200 ) {
+			echo("Unable to get a valid Docker Hub response...");
+			return NULL;
+		}
+		
+		$body = wp_remote_retrieve_body( $response );
+		$result = json_decode($body, true);
 
-			// Get the results
-			$result = curl_exec($curl);
-
-			// Close the curl session
-			curl_close($curl);
-			
-			// Decode the results
-			$result = json_decode($result, true);
-
-			// Return the results
-			return $result;
+		return $result;
 	}
 
 	private function gitDate($date)
