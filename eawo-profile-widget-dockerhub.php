@@ -236,7 +236,7 @@ class EaWo_Profile_Widget_DockerHub extends WP_Widget
 
 							$widget .= '
 							<svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 14 16" width="14"><path d="M8 8h3v2H7c-.55 0-1-.45-1-1V4h2v4zM7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7z"></path></svg>
-							Joined on ' . $this->gitDate($userAPI['date_joined']) . '
+							Joined on ' . $this->parseDate($userAPI['date_joined']) . '
 						</span>';
 						
 						$starredAPI = $this->get_dockerhub_response('https://hub.docker.com/v2/users/' . $dockerhub_user . '/repositories/starred/?page=1&page_size=1');
@@ -317,79 +317,11 @@ class EaWo_Profile_Widget_DockerHub extends WP_Widget
 		return $result;
 	}
 
-	private function gitDate($date)
+	private function parseDate($date)
 	{
-		$dateArray = explode('-', $date);
-		// Add the day to the string
-		$date = substr($dateArray[2], 0, 2) . ' ';
-		// Add the month to the string
-		$date .= $this->getMonth($dateArray[1]) . ' ';
-		// Add the year
-		$date .= $dateArray[0];
+		$timestamp = strtotime($date);
+		$date = date("d M Y", $timestamp);
 		return $date;
-	}
-
-	private function getMonth($month)
-	{
-		if ($month == '01')
-		{
-			return 'Jan';
-		}
-		else
-		if ($month == '02')
-		{
-			return 'Feb';
-		}
-		else
-		if ($month == '03')
-		{
-			return 'Mar';
-		}
-		else
-		if ($month == '04')
-		{
-			return 'Apr';
-		}
-		else
-		if ($month == '05')
-		{
-			return 'May';
-		}
-		else
-		if ($month == '06')
-		{
-			return 'Jun';
-		}
-		else
-		if ($month == '07')
-		{
-			return 'Jul';
-		}
-		else
-		if ($month == '08')
-		{
-			return 'Aug';
-		}
-		else
-		if ($month == '09')
-		{
-			return 'Sep';
-		}
-		else
-		if ($month == '10')
-		{
-			return 'Oct';
-		}
-		else
-		if ($month == '11')
-		{
-			return 'Nov';
-		}
-		else
-		if ($month == '12')
-		{
-			return 'Dec';
-		}
 	}
 
 	// Shortens a number and attaches K, M, B, etc. accordingly (from: http://stackoverflow.com/a/35329932)
