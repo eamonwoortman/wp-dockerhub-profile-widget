@@ -32,6 +32,8 @@ add_action('widgets_init', create_function('', 'return register_widget("EaWo_Pro
 // Register the css
 add_action( 'wp_enqueue_scripts', 'ew_dhmpw_style');
 
+register_deactivation_hook( __FILE__, 'ew_dhmpw_deactivate_plugin' );
+
 /**
  * A function to register and enque the stylesheet
  */
@@ -39,6 +41,26 @@ function ew_dhmpw_style()
 {
 	wp_register_style( 'ew-dhmpw-style', plugins_url('eawo-profile-widget-dockerhub.css', __FILE__) );
 	wp_enqueue_style( 'ew-dhmpw-style' );
+}
+
+function delete_transients() 
+{
+	global $wpdb;
+
+	$transients = $wpdb->get_results(
+				"SELECT option_name AS name, option_value AS value FROM $wpdb->options 
+				WHERE option_name LIKE '_transient_".EaWo_Profile_Widget_DockerHub::TRANSIENT_PREFIX."%'"
+			);
+	
+	foreach($transients as $transient) {
+		$key = str_replace('_transient_', '', $transient->name);
+		delete_transient($key); 
+	}	
+}
+
+function ew_dhmpw_deactivate_plugin() 
+{
+	delete_transients();
 }
 
 /**
@@ -49,7 +71,7 @@ class EaWo_Profile_Widget_DockerHub extends WP_Widget
 	/** Basic Widget Settings */
 	const WIDGET_NAME = "Docker Hub Mini Profile Widget";
 	const WIDGET_DESCRIPTION = "Add a mini version of your DockerHub profile to your website.";
-
+	const TRANSIENT_PREFIX = "eawowpdhpw";
 	var $textdomain;
 	var $fields;
 
@@ -172,7 +194,8 @@ class EaWo_Profile_Widget_DockerHub extends WP_Widget
 		extract($instance);
 
 		// Set the cache name for this instance of the widget
-		$cache = get_transient('wpdhpw' . md5(serialize($dockerhub_user)));
+		$transient_key = self::TRANSIENT_PREFIX . md5(serialize($dockerhub_user));
+		$cache = get_transient($transient_key);
 
 		if ($cache)
 		{
@@ -296,7 +319,7 @@ class EaWo_Profile_Widget_DockerHub extends WP_Widget
 			{
 				$timeout = 1;
 			}
-			set_transient('wpdhpw' . md5(serialize($dockerhub_user)), $widget, $timeout);
+			set_transient($transient_key, $widget, $timeout);
 			echo $widget;
 		}
 	}
