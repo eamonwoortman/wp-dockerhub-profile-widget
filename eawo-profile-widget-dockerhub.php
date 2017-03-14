@@ -43,7 +43,7 @@ function ew_dhmpw_style()
 	wp_enqueue_style( 'ew-dhmpw-style' );
 }
 
-function delete_transients() 
+function ew_dhmpw_clear_cache() 
 {
 	global $wpdb;
 
@@ -60,7 +60,7 @@ function delete_transients()
 
 function ew_dhmpw_deactivate_plugin() 
 {
-	delete_transients();
+	ew_dhmpw_clear_cache();
 }
 
 /**
