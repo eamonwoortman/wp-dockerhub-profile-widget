@@ -1,5 +1,5 @@
-=== Plugin Name ===
-Contributors: eamonwoortman
+=== EaWo Profile Widget Docker Hub ===
+Contributors: eamonwoortman,f13dev
 Tags: dockerhub, widget, profile, code
 Requires at least: 3.0.1
 Tested up to: 4.7.2
@@ -10,7 +10,6 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 A WordPress widget that utilises the Docker Hub API to display a snapshot of your Docker Hub profile on your WordPress blog.
 
 == Description ==
-
 Got an interesting Docker Hub profile you want to share with the world? 
 
 Simply add the widget to your preferred location and enter your Docker Hub username.
@@ -26,8 +25,15 @@ The widget plugin features include:
 * A list of the popular repositories by the user, including the amount of stars and pulls for each repository
 * A cached result of the widget using Transient, the cache timout can be adjusted via the widget settings
 
-== Installation ==
+-- Credits --
+This plugin is forked from f13dev's Github Profile Widget, which is available here:   https://wordpress.org/plugins/f13-github-mini-profile-widget/. 
+I replaced the Github API calls with the Docker Hub API calls and changed the style to match the looks of Docker Hub.  So credits go to f13dev for his original plugin.
 
+Credits go to the Github team for their “star.svg” and “cloud-download.svg” from: https://github.com/primer/octicons/tree/master/lib/svg
+
+
+
+== Installation ==
 This section describes how to install the plugin and get it working.
 
 1. Upload the plugin files to the `/wp-content/plugins/plugin-name` directory, or install the plugin through the WordPress plugins screen directly.
@@ -36,11 +42,17 @@ This section describes how to install the plugin and get it working.
 4. Enter your Docker Hub username in the appropriate field
 
 == Screenshots ==
-
 1. An example showing the Docker Hub Mini Profile Widget in use.
 2. Adding the profile widget
 
 == Changelog ==
+v1.2 - 2015-03-14
+	* Made some code and name changes to match the Wordpress Plugin guidelines
+	* Cache will now be cleared after deactivation of the plugin
 
-= 1.0 =
-* Initial release
+v1.1 - 2015-03-05 
+	* Changed plugin name to eawo-profile-widget-dockerhub
+	* Added check on non-existent Docker Hub user
+
+v1.0
+	* Initial version
