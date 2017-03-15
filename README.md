@@ -45,11 +45,20 @@ This section describes how to install the plugin and get it working.
 
 # Changelog
 
-1.0
-* Initial release
+v1.2 - 2015-03-14
+	* Made some code and name changes to match the Wordpress Plugin guidelines
+	* Cache will now be cleared after deactivation of the plugin
+
+v1.1 - 2015-03-05 
+	* Changed plugin name to eawo-profile-widget-dockerhub
+	* Added check on non-existent Docker Hub user
+
+v1.0
+	* Initial version
 
 # Credits
 
-Credits goes to James Valentine for creating the original Github Profile Widget. I merely changed the API calls and visuals of his plugin so go to his repository and star him: https://github.com/f13dev/wp-github-profile-widget.
+This plugin is forked from f13dev's Github Profile Widget, which is available here:   https://wordpress.org/plugins/f13-github-mini-profile-widget/. 
+I replaced the Github API calls with the Docker Hub API calls and changed the style to match the looks of Docker Hub.  So credits go to f13dev for his original plugin.
 
 Credits go to the Github team for their “star.svg” and “cloud-download.svg” from: https://github.com/primer/octicons/tree/master/lib/svg

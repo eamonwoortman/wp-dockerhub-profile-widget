@@ -3,7 +3,7 @@
 Plugin Name: EaWo Profile Widget for Docker Hub
 Plugin URI: https://eamonwoortman.nl/dockerhub-profile-wordpress-widget/
 Description: Add a mini version of your DockerHub profile to a widget on a WordPress powered site.
-Version: 1.1
+Version: 1.2
 Author: Eamon Woortman - eamonwoortman
 Author URI: https://eamonwoortman.nl
 Text Domain: eawo-profile-widget-dockerhub
@@ -12,6 +12,7 @@ License: GPLv3
 
 /*
 Copyright 2017 Eamon Woortman - eamonwoortman (contact@eamonwoortman.com)
+Copyright 2016 James Valentine - f13dev (jv@f13dev.com)
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation; either version 3 of the License, or
@@ -32,6 +33,8 @@ add_action('widgets_init', create_function('', 'return register_widget("EaWo_Pro
 // Register the css
 add_action( 'wp_enqueue_scripts', 'ew_dhmpw_style');
 
+register_deactivation_hook( __FILE__, 'ew_dhmpw_deactivate_plugin' );
+
 /**
  * A function to register and enque the stylesheet
  */
@@ -39,6 +42,26 @@ function ew_dhmpw_style()
 {
 	wp_register_style( 'ew-dhmpw-style', plugins_url('eawo-profile-widget-dockerhub.css', __FILE__) );
 	wp_enqueue_style( 'ew-dhmpw-style' );
+}
+
+function ew_dhmpw_clear_cache() 
+{
+	global $wpdb;
+
+	$transients = $wpdb->get_results(
+				"SELECT option_name AS name, option_value AS value FROM $wpdb->options 
+				WHERE option_name LIKE '_transient_".EaWo_Profile_Widget_DockerHub::TRANSIENT_PREFIX."%'"
+			);
+	
+	foreach($transients as $transient) {
+		$key = str_replace('_transient_', '', $transient->name);
+		delete_transient($key); 
+	}	
+}
+
+function ew_dhmpw_deactivate_plugin() 
+{
+	ew_dhmpw_clear_cache();
 }
 
 /**
@@ -49,7 +72,7 @@ class EaWo_Profile_Widget_DockerHub extends WP_Widget
 	/** Basic Widget Settings */
 	const WIDGET_NAME = "Docker Hub Mini Profile Widget";
 	const WIDGET_DESCRIPTION = "Add a mini version of your DockerHub profile to your website.";
-
+	const TRANSIENT_PREFIX = "eawowpdhpw";
 	var $textdomain;
 	var $fields;
 
@@ -172,7 +195,8 @@ class EaWo_Profile_Widget_DockerHub extends WP_Widget
 		extract($instance);
 
 		// Set the cache name for this instance of the widget
-		$cache = get_transient('wpdhpw' . md5(serialize($dockerhub_user)));
+		$transient_key = self::TRANSIENT_PREFIX . md5(serialize($dockerhub_user));
+		$cache = get_transient($transient_key);
 
 		if ($cache)
 		{
@@ -236,7 +260,7 @@ class EaWo_Profile_Widget_DockerHub extends WP_Widget
 
 							$widget .= '
 							<svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 14 16" width="14"><path d="M8 8h3v2H7c-.55 0-1-.45-1-1V4h2v4zM7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7z"></path></svg>
-							Joined on ' . $this->gitDate($userAPI['date_joined']) . '
+							Joined on ' . $this->parseDate($userAPI['date_joined']) . '
 						</span>';
 						
 						$starredAPI = $this->get_dockerhub_response('https://hub.docker.com/v2/users/' . $dockerhub_user . '/repositories/starred/?page=1&page_size=1');
@@ -296,114 +320,32 @@ class EaWo_Profile_Widget_DockerHub extends WP_Widget
 			{
 				$timeout = 1;
 			}
-			set_transient('wpdhpw' . md5(serialize($dockerhub_user)), $widget, $timeout);
+			set_transient($transient_key, $widget, $timeout);
 			echo $widget;
 		}
 	}
 
 	private function get_dockerhub_response($url)
 	{
-			// Start curl
-			$curl = curl_init();
-			// Set curl options
-			curl_setopt($curl, CURLOPT_URL, $url);
-			curl_setopt($curl, CURLOPT_HTTPGET, true);
-			curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-					'Content-Type: application/json',
-					'Accept: application/json'
-			));
+		$response = wp_remote_get( esc_url_raw( $url ) );
+		$response_code = wp_remote_retrieve_response_code( $response );
 
-			// Set the user agent
-			curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.13) Gecko/20080311 Firefox/2.0.0.13');
-			// Set curl to return the response, rather than print it
-			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		if ($response_code != 200 ) {
+			echo("Unable to get a valid Docker Hub response...");
+			return NULL;
+		}
+		
+		$body = wp_remote_retrieve_body( $response );
+		$result = json_decode($body, true);
 
-			// Get the results
-			$result = curl_exec($curl);
-
-			// Close the curl session
-			curl_close($curl);
-			
-			// Decode the results
-			$result = json_decode($result, true);
-
-			// Return the results
-			return $result;
+		return $result;
 	}
 
-	private function gitDate($date)
+	private function parseDate($date)
 	{
-		$dateArray = explode('-', $date);
-		// Add the day to the string
-		$date = substr($dateArray[2], 0, 2) . ' ';
-		// Add the month to the string
-		$date .= $this->getMonth($dateArray[1]) . ' ';
-		// Add the year
-		$date .= $dateArray[0];
+		$timestamp = strtotime($date);
+		$date = date("d M Y", $timestamp);
 		return $date;
-	}
-
-	private function getMonth($month)
-	{
-		if ($month == '01')
-		{
-			return 'Jan';
-		}
-		else
-		if ($month == '02')
-		{
-			return 'Feb';
-		}
-		else
-		if ($month == '03')
-		{
-			return 'Mar';
-		}
-		else
-		if ($month == '04')
-		{
-			return 'Apr';
-		}
-		else
-		if ($month == '05')
-		{
-			return 'May';
-		}
-		else
-		if ($month == '06')
-		{
-			return 'Jun';
-		}
-		else
-		if ($month == '07')
-		{
-			return 'Jul';
-		}
-		else
-		if ($month == '08')
-		{
-			return 'Aug';
-		}
-		else
-		if ($month == '09')
-		{
-			return 'Sep';
-		}
-		else
-		if ($month == '10')
-		{
-			return 'Oct';
-		}
-		else
-		if ($month == '11')
-		{
-			return 'Nov';
-		}
-		else
-		if ($month == '12')
-		{
-			return 'Dec';
-		}
 	}
 
 	// Shortens a number and attaches K, M, B, etc. accordingly (from: http://stackoverflow.com/a/35329932)
